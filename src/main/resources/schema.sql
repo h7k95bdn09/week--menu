@@ -39,3 +39,19 @@ CREATE TABLE IF NOT EXISTS houses (
  	 FOREIGN KEY (recipe_id) REFERENCES recipe (id),
  	 FOREIGN KEY (food_id) REFERENCES food (id)
  );
+ 
+
+CREATE OR REPLACE VIEW recipe_summary AS
+    SELECT 
+        recipe_id,
+        r.name,
+        r.image_name,
+        SUM(f.price * rf.piece) AS total
+    FROM
+        recipe_food rf
+            LEFT OUTER JOIN
+        recipe r ON (rf.recipe_id = r.id)
+            LEFT OUTER JOIN
+        food f ON (rf.food_id = f.id)
+    GROUP BY rf.recipe_id , r.name , r.image_name
+ ;

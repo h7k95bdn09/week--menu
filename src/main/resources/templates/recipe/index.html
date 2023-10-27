@@ -1,34 +1,43 @@
 <!DOCTYPE html>
 <html xmlns="https://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>weekmenu</title>
-	</head>
-	<body>
-		<p>recipe</p>
-		<div th:object="${recipeFoodForm}">
-			<table class="table">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>weekmenu</title>
+  </head>
+  <body>
+    <form
+      method="post"
+      th:action="@{/recipe/search}"
+      th:object="${recipeFoodForm}"
+    >
+      <span>食費：</span>
+      <input type="number" step="10" th:field="*{searchValue}" autofocus />
+      <button type="submit">取得</button>
+
+      <div
+        th:if="${#fields.hasErrors('searchValue')}"
+        style="color: red"
+        th:errors="*{searchValue}"
+      ></div>
+
+      <table class="table">
         <thead>
           <tr>
             <th scope="col">ID</th>
             <th scope="col">レシピ</th>
-            <th scope="col">フード</th>
             <th scope="col">金額</th>
-            <th scope="col">個数</th>
           </tr>
         </thead>
         <tbody>
-          <tr th:each="rf, st : *{recipeFoodList}">
-            <td th:text="${rf.getId}"></td>
-            <td th:text="${rf.recipe.name}"></td>
-            <td th:text="${rf.food.name}"></td>
-            <td th:text="${rf.food.price}"></td>
-            <td th:text="${rf.piece}"></td>
+          <tr th:each="rf, st : *{recipeSummaryList}">
+            <td th:text="${rf.recipeId}"></td>
+            <td th:text="${rf.name}"></td>
+            <td th:text="${rf.total}"></td>
           </tr>
         </tbody>
       </table>
-		</div>
-		
-	</body>
+      <span>合計：</span><span th:text="*{sum}"></span>
+    </form>
+  </body>
 </html>
