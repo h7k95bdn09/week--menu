@@ -8,20 +8,25 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.weekmenu.entity.RecipeFood;
 import com.example.weekmenu.entity.RecipeSummary;
 import com.example.weekmenu.form.RecipeFoodForm;
+import com.example.weekmenu.repository.RecipeFoodRepository;
 import com.example.weekmenu.service.RecipeService;
 
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
 	private final RecipeService recipeService;
+	private final RecipeFoodRepository recipeFoodRepository;
 
-	public RecipeController(RecipeService recipeService) {
+	public RecipeController(RecipeService recipeService, RecipeFoodRepository recipeFoodRepository) {
 		this.recipeService = recipeService;
+		this.recipeFoodRepository = recipeFoodRepository;
 	}
 
 	@GetMapping
@@ -48,5 +53,15 @@ public class RecipeController {
 
 		return "recipe/index";
 	}
+	
+	@GetMapping("/{id}")
+    public String show(@PathVariable(name = "id") Integer id, Model model) {
+        List<RecipeFood> recipeFood = recipeFoodRepository.findAll();
+        List<RecipeFood> recipeFoodList = recipeFood.stream().filter(v -> v.getRecipe().getId() == id).toList();
+        
+        model.addAttribute("recipeFood", recipeFoodList);
+        
+        return "recipe/detail";
+    }   
 
 }

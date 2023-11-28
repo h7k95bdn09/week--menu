@@ -27,6 +27,7 @@
             <th scope="col">ID</th>
             <th scope="col">レシピ</th>
             <th scope="col">金額</th>
+            <th scope="col">詳細</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@
             <td th:text="${rf.recipeId}"></td>
             <td th:text="${rf.name}"></td>
             <td th:text="${rf.total}"></td>
+            <td><a th:href="@{/recipe/__${rf.getRecipeId()}__}">詳細</a></td>                                                                                                                 
           </tr>
         </tbody>
       </table>
